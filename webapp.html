@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tic-Tac-Toe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 5px;
+    }
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5em;
+      cursor: pointer;
+      border: 2px solid #333;
+    }
+    .cell.taken {
+      cursor: not-allowed;
+      color: #444;
+    }
+    #message {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    #moves {
+      margin-top: 10px;
+      font-size: 0.95em;
+    }
+    .button-container {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tic-Tac-Toe</h1>
+  <div class="board" id="board"></div>
+  <div id="message"></div>
+  <div id="moves"></div>
+
+  <div class="button-container">
+    <button class="btn" id="newGameBtn">New Game</button>
+    <a href="index.html" class="btn">Back to Home</a>
+  </div>
+
+  <script>
+    const boardElement = document.getElementById("board");
+    const messageElement = document.getElementById("message");
+    const movesElement = document.getElementById("moves");
+    const newGameBtn = document.getElementById("newGameBtn");
+
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let gameOver = false;
+
+    const winPatterns = [
+      [0,1,2], [3,4,5], [6,7,8], // rows
+      [0,3,6], [1,4,7], [2,5,8], // cols
+      [0,4,8], [2,4,6]           // diagonals
+    ];
+
+    function renderBoard() {
+      boardElement.innerHTML = "";
+      board.forEach((cell, index) => {
+        const div = document.createElement("div");
+        div.classList.add("cell");
+        if (cell) {
+          div.textContent = cell;
+          div.classList.add("taken");
+        }
+        div.addEventListener("click", () => playerMove(index));
+        boardElement.appendChild(div);
+      });
+    }
+
+    function playerMove(index) {
+      if (board[index] || gameOver) return;
+
+      board[index] = "X";
+      updateMoves();
+      renderBoard();
+
+      if (checkWinner("X")) {
+        messageElement.textContent = "You win!";
+        gameOver = true;
+        return;
+      }
+
+      if (board.every(cell => cell)) {
+        messageElement.textContent = "It's a draw!";
+        gameOver = true;
+        return;
+      }
+
+      setTimeout(computerMove, 500);
+    }
+
+    function computerMove() {
+      if (gameOver) return;
+
+      const emptyIndices = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+      const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+      board[randomIndex] = "O";
+
+      updateMoves();
+      renderBoard();
+
+      if (checkWinner("O")) {
+        messageElement.textContent = "Computer wins!";
+        gameOver = true;
+      } else if (board.every(cell => cell)) {
+        messageElement.textContent = "It's a draw!";
+        gameOver = true;
+      }
+    }
+
+    function checkWinner(player) {
+      return winPatterns.some(pattern =>
+        pattern.every(index => board[index] === player)
+      );
+    }
+
+    function updateMoves() {
+      const playerMoves = board.map((v, i) => v === "X" ? i : null).filter(v => v !== null);
+      const computerMoves = board.map((v, i) => v === "O" ? i : null).filter(v => v !== null);
+      movesElement.innerHTML = `
+        Your moves: ${playerMoves.join(", ")}<br>
+        Computer moves: ${computerMoves.join(", ")}
+      `;
+    }
+
+    function resetGame() {
+      board = ["", "", "", "", "", "", "", "", ""];
+      gameOver = false;
+      messageElement.textContent = "";
+      movesElement.textContent = "";
+      renderBoard();
+    }
+
+    newGameBtn.addEventListener("click", resetGame);
+
+    renderBoard();
+  </script>
+</body>
+</html>

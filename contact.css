@@ -1,0 +1,68 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+.contact-details p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #3498db;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.social-media {
+    margin-top: 40px;
+}
+
+.social-media h2 {
+    color: #2c3e50;
+    font-size: 22px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+ul li a {
+    color: #3498db;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+}
